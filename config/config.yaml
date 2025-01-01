@@ -1,0 +1,85 @@
+# ============================================================
+#  Credit Card Fraud Detection — Configuration
+#  All hyperparameters and settings in one place
+# ============================================================
+
+data:
+  path: "data/creditcard.csv"
+  test_size: 0.20
+  random_state: 42
+  target_column: "Class"
+
+preprocessing:
+  scaler: "RobustScaler"       # RobustScaler is outlier-resistant
+  scale_columns: ["Amount", "Time"]
+
+feature_engineering:
+  enable_hour: true             # Extract hour from Time field
+  enable_day_segment: true      # Categorize hour into 4 segments
+  enable_amount_log: true       # Log-transform Amount (reduce skew)
+  enable_amount_squared: true   # Capture U-shaped fraud pattern
+
+balancing:
+  method: "SMOTETomek"         # SMOTE + Tomek Links combined
+  smote_k_neighbors: 5         # Neighbors for synthetic sample creation
+  random_state: 42
+
+models:
+  logistic_regression:
+    max_iter: 1000
+    C: 1.0
+    random_state: 42
+
+  decision_tree:
+    max_depth: 10
+    min_samples_leaf: 5
+    random_state: 42
+
+  random_forest:
+    n_estimators: 200
+    max_features: "sqrt"
+    n_jobs: -1
+    random_state: 42
+
+  gradient_boosting:
+    n_estimators: 200
+    learning_rate: 0.1
+    max_depth: 5
+    random_state: 42
+
+  xgboost:
+    n_estimators: 300
+    learning_rate: 0.05
+    max_depth: 6
+    subsample: 0.8
+    colsample_bytree: 0.8
+    scale_pos_weight: 577      # Ratio of negatives to positives
+    eval_metric: "logloss"
+    random_state: 42
+
+cascade:
+  isolation_forest:
+    n_estimators: 200
+    contamination: 0.002       # Expected fraud proportion
+    n_jobs: -1
+    random_state: 42
+  screening_percentile: 5      # Flag bottom 5% anomaly scores
+
+threshold:
+  optimize: true
+  metric: "f2"                 # F2 weights recall 2x over precision
+  default: 0.5
+
+shap:
+  sample_size: 500             # Transactions to explain (speed vs coverage)
+  max_display: 15              # Top features to show in plot
+
+evaluation:
+  metrics: ["precision", "recall", "f1", "roc_auc", "mcc"]
+  top_k: 10
+
+output:
+  models_dir: "models/"
+  results_dir: "results/"
+  save_models: true
+  save_plots: true
