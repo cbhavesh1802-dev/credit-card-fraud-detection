@@ -160,11 +160,11 @@ curl -X POST http://localhost:5000/predict \
 
 If you use this work, please cite:
 ```bibtex
-@article{fraud2024cascade,
+@article{fraud2022cascade,
   title={A Novel Two-Stage Cascade Detection System for Credit Card Fraud Using Machine Learning with SHAP Explainability},
-  author={[Your Name]},
+  author={Bhavesh Mukesh Chaudhari},
   journal={Bachelor's Research Publication},
-  year={2024}
+  year={2022}
 }
 ```
 
