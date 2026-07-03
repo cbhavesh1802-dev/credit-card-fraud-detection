@@ -70,4 +70,6 @@ SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
 out_path = os.path.join(SCRIPT_DIR, "creditcard.csv")
 df.to_csv(out_path, index=False)
 
-print(f"Wrote {len(df):,} rows ({df[\'Class\'].sum()} fraud, {df[\'Class\'].mean()*100:.3f}% fraud rate) to {out_path}")
+fraud_count = df["Class"].sum()
+fraud_pct = df["Class"].mean() * 100
+print(f"Wrote {len(df):,} rows ({fraud_count} fraud, {fraud_pct:.3f}% fraud rate) to {out_path}")
