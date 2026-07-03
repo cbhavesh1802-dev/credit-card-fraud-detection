@@ -13,6 +13,15 @@ This project analyzes ~285K anonymized credit card transactions to answer the qu
 - A handful of anonymized features (V14, V12, V4, V17) drive most of the predictive signal, confirmed by both correlation analysis and the models SHAP explanations
 - Severe class imbalance (0.172% fraud) -- addressed via SMOTETomek resampling in the model layer
 
+
+## Charts
+
+![Fraud rate by hour](outputs/charts/fraud_rate_by_hour.png)
+![Fraud rate by amount band](outputs/charts/fraud_rate_by_amount_band.png)
+![Rolling fraud rate trend](outputs/charts/rolling_fraud_rate.png)
+![Feature correlation](outputs/charts/feature_correlation.png)
+![Class imbalance](outputs/charts/class_imbalance.png)
+
 ## Project Structure
 
 data/ - transaction data (Time, V1-V28, Amount, Class) and generate_data.py
