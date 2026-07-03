@@ -1,15 +1,13 @@
-"""
-Runs every analyst SQL query against fraud_analytics.db and exports each
-result as a CSV in outputs/ -- these feed the Power BI dashboard and the
-EDA notebook.
-"""
-
 import sqlite3
 import pandas as pd
 import os
 
-DB_PATH = "/home/claude/project/data/fraud_analytics.db"
-OUT_DIR = "/home/claude/project/outputs"
+SCRIPT_DIR = os.path.dirname(os.path.abspath(__file__))
+PROJECT_ROOT = os.path.dirname(SCRIPT_DIR)
+
+DB_PATH = os.path.join(PROJECT_ROOT, "data", "fraud_analytics.db")
+SQL_DIR = SCRIPT_DIR
+OUT_DIR = os.path.join(PROJECT_ROOT, "outputs")
 os.makedirs(OUT_DIR, exist_ok=True)
 
 conn = sqlite3.connect(DB_PATH)
@@ -25,20 +23,10 @@ def run_sql_file(path, out_name):
     return df
 
 
-# 1. Fraud rate by hour
-run_sql_file("/home/claude/project/sql/01_fraud_rate_by_hour.sql",
-             "fraud_rate_by_hour.csv")
+run_sql_file(os.path.join(SQL_DIR, "01_fraud_rate_by_hour.sql"), "fraud_rate_by_hour.csv")
+run_sql_file(os.path.join(SQL_DIR, "02_fraud_rate_by_amount_band.sql"), "fraud_rate_by_amount_band.csv")
+run_sql_file(os.path.join(SQL_DIR, "03_rolling_fraud_rate.sql"), "rolling_fraud_rate.csv")
 
-# 2. Fraud rate by amount band
-run_sql_file("/home/claude/project/sql/02_fraud_rate_by_amount_band.sql",
-             "fraud_rate_by_amount_band.csv")
-
-# 3. Rolling fraud rate
-run_sql_file("/home/claude/project/sql/03_rolling_fraud_rate.sql",
-             "rolling_fraud_rate.csv")
-
-# 4. Feature correlation -- loop all 28 V-columns (the .sql file only shows
-#    the V14 example for readability; this loop covers all of them)
 rows = []
 for i in range(1, 29):
     col = f"V{i}"
@@ -69,7 +57,6 @@ corr_out = os.path.join(OUT_DIR, "feature_correlation_ranked.csv")
 corr_df.to_csv(corr_out, index=False)
 print(f"feature_correlation_ranked.csv: {len(corr_df)} rows -> {corr_out}")
 
-# 5. Class imbalance summary (simple, useful headline stat for the dashboard)
 imbalance_df = pd.read_sql_query(
     """
     SELECT

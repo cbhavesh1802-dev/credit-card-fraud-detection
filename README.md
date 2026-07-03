@@ -15,7 +15,7 @@ This project analyzes ~285K anonymized credit card transactions to answer the qu
 
 ## Project Structure
 
-data/ - transaction data (Time, V1-V28, Amount, Class) and generate_synthetic.py
+data/ - transaction data (Time, V1-V28, Amount, Class) and generate_data.py
 sql/ - 00_schema.sql, 01_fraud_rate_by_hour.sql, 02_fraud_rate_by_amount_band.sql, 03_rolling_fraud_rate.sql (window function), 04_feature_correlation.sql, load_db.py, run_all_queries.py
 outputs/ - query results, ready for Power BI import
 notebooks/ - 01_EDA.ipynb
